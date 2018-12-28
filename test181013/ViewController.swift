@@ -42,11 +42,12 @@ class ViewController: UIViewController {
 
     var temp:Double = 0
     var remember: Bool = true
-    var count = 0
+    var count = 0 //符号标示
     var temp1: Int = 0
-    var count3 = 0
+    var count3 = 0//记录乘除前加减号
     var sum : Double = 1
-    var count1 = 0
+    var count1 = 0  //记录第一个数字
+    var count2 = 0
     @IBOutlet weak var display: UITextField!
     @IBAction func H1(_ sender: Any) {
         if(display.text == "0")
@@ -126,25 +127,33 @@ class ViewController: UIViewController {
         {
         count = 1
             temp = Double(display.text!)!
-            myStack.push(element:temp)
+            if(OmyStack.peek() == 2 ){
+                temp *= -1
+                myStack.push(element: temp)
+                count2 += 1
+            }else{
+                myStack.push(element: temp)
+            }
+            
             if(count1 == 0){
                 OmyStack.push(element: count)
             }else{
-                    let x = OmyStack.pop()
-                    switch(x){
-                    case 3: sum /= myStack.pop()!
-                    case 4: sum *= myStack.pop()!
+                let x = OmyStack.peek()! //偷看前面是什么符号
+            if(x == 3 || x == 4) //如果是乘除的话将乘除符号出栈
+            {
+                let _ = OmyStack.pop()!
+            }
+                switch(x){
+                    case 3: sum = myStack.pop()! / myStack.pop()!
+                    case 4: sum = myStack.pop()! * myStack.pop()!
                     default : count3 += 1
                     }
                 if(x == 3||x == 4){
                 myStack.push(element: sum)
+                    sum = 1
                 }
-            }
-            if(count3 > 0){
                 OmyStack.push(element: count)
-                count3 = 0
             }
-            OmyStack.push(element: count)
             remember = true
             display.text = ""
             count1 += 1
@@ -161,25 +170,28 @@ class ViewController: UIViewController {
             myStack.push(element:temp)
             if(count1 == 0){
                 OmyStack.push(element: count)
+                
             }else{
-                    let x = OmyStack.pop()
-                    switch(x){
-                    case 3: sum /= myStack.pop()!
-                    case 4: sum *= myStack.pop()!
+                print(myStack.peek()!)
+                let x = OmyStack.peek()!
+            if(x == 3 || x == 4) //如果是乘除的话将乘除符号出栈
+            {
+                let _ = OmyStack.pop()!
+            }
+                switch(x){
+                    case 3: sum = myStack.pop()! / myStack.pop()!
+                    case 4: sum = myStack.pop()! * myStack.pop()!
                     default : count3 += 1
                     }
                 if(x == 3||x == 4){
                     myStack.push(element: sum)
+                    sum = 1
                 }
-            }
-            if(count3 > 0){
-                OmyStack.push(element: count)
-                count3 = 0
-            }
             OmyStack.push(element: count)
+            }
             remember = true
             display.text = ""
-            count += 1
+            count1 += 1
         }
     }
     @IBAction func division(_ sender: Any) {
@@ -195,7 +207,7 @@ class ViewController: UIViewController {
                 sum = myStack.pop()!
                 myStack.push(element: sum)
             }else{
-                let x = OmyStack.pop()
+                let x = OmyStack.peek()!
                 switch(x){
                 case 3: sum = myStack.pop()! / myStack.pop()!
                 case 4: sum = myStack.pop()! * myStack.pop()!
@@ -219,12 +231,24 @@ class ViewController: UIViewController {
         {
             count = 4
             temp = Double(display.text!)!
-            myStack.push(element:temp)
+            if(OmyStack.peek() == 2 ){
+                temp *= -1
+                myStack.push(element: temp)
+                count2 += 1
+            }else{
+                myStack.push(element: temp)
+            }
+            
             if(count1 == 0){
                 sum = myStack.pop()!
                 myStack.push(element: sum)
+                sum = 1
             }else {
-                let x = OmyStack.pop()
+                let x = OmyStack.peek()!
+                if(x == 3 || x == 4) //如果是乘除的话将乘除符号出栈
+                {
+                    let _ = OmyStack.pop()!
+                }
                 switch(x){
                 case 3: sum = myStack.pop()! / myStack.pop()!
                 case 4: sum = myStack.pop()! * myStack.pop()!
@@ -232,6 +256,7 @@ class ViewController: UIViewController {
                 }
                 if(x == 3||x == 4){
                     myStack.push(element: sum)
+                    sum = 1
                 }
             }
             OmyStack.push(element: count)
@@ -246,11 +271,16 @@ class ViewController: UIViewController {
         } else
         {
             temp = Double(display.text!)!
-            myStack.push(element: temp)
-            for _ in 1...OmyStack.count{
-            Calculation()
+            if(OmyStack.peek() == 2 ){
+                temp *= -1
+                myStack.push(element: temp)
+                count2 += 1
+            }else{
+                myStack.push(element: temp)
             }
-            
+            for _ in 1...OmyStack.count{
+                Calculation()
+            }
             sum = myStack.pop()!
             count1 = 0
             display.text = "\(sum)"
@@ -292,22 +322,32 @@ class ViewController: UIViewController {
         }
     }
     func Calculation() -> () {
-        let x = OmyStack.pop()
+        if(OmyStack.count != 1){
+        let x = OmyStack.pop()!
         switch(x){
         case 1: sum = myStack.pop()! + myStack.pop()!
-        case 2: sum = myStack.pop()! - myStack.pop()!
         case 3: sum = myStack.pop()! / myStack.pop()!
         case 4: sum = myStack.pop()! * myStack.pop()!
-        default : sum = 0
+        default : count1 += 1
     }
-      if(x == 2)
-      {
-        sum *= -1
-    }
-        if(x == 3)
+        if(x == 2)
         {
-            sum = 1/sum
+            if(count2 == 0){
+                sum = myStack.pop()! - myStack.pop()! //当没有负数时
+                print(5)
+            }else{
+                sum = myStack.pop()! + myStack.pop()! //有负数时计算
+            }
         }
+            if(x == 3)
+            {
+                sum = 1/sum
+            }
+        } else{
+            let _ = OmyStack.pop()!
+            sum = myStack.pop()! + myStack.pop()!
+        }
+        print(sum)
     myStack.push(element: sum)
     }
     
@@ -316,6 +356,8 @@ class ViewController: UIViewController {
         remember = true
         sum = 0
         count1 = 0
+        count2 = 0
+        count3 = 0
     }
     override func viewDidLoad() {
         super.viewDidLoad()
