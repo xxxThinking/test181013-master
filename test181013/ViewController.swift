@@ -50,13 +50,16 @@ class ViewController: UIViewController {
     var countFrist = 0  //记录第一个数字
     var countNegative = 0  //记录乘除加法前是否有减号
     var countget = 0 //记录 = 号调用次数
+    var temp1:Int = 0
     @IBOutlet weak var display: UITextField!
+    @IBOutlet weak var displaypeek: UITextField!
     @IBAction func H1(_ sender: Any) {
         if(display.text == "0")
         {
             display.text = ""
         }
         display.text = display.text! + "1"
+        displaypeek.text = displaypeek.text! + "1"
     }
     @IBAction func H2(_ sender: Any) {
         if(display.text == "0")
@@ -64,6 +67,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "2"
+        displaypeek.text = displaypeek.text! + "2"
     }
     @IBAction func H3(_ sender: Any) {
         if(display.text == "0")
@@ -71,6 +75,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "3"
+        displaypeek.text = displaypeek.text! + "3"
     }
     @IBAction func H4(_ sender: Any) {
         if(display.text == "0")
@@ -78,6 +83,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "4"
+        displaypeek.text = displaypeek.text! + "4"
     }
     @IBAction func H5(_ sender: Any) {
         if(display.text == "0")
@@ -85,6 +91,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text!  + "5"
+        displaypeek.text = displaypeek.text! + "5"
     }
     @IBAction func H6(_ sender: Any) {
         if(display.text == "0")
@@ -92,6 +99,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "6"
+        displaypeek.text = displaypeek.text! + "6"
     }
     @IBAction func H7(_ sender: Any) {
         if(display.text == "0")
@@ -99,6 +107,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "7"
+        displaypeek.text = displaypeek.text! + "7"
     }
     @IBAction func H8(_ sender: Any) {
         if(display.text == "0")
@@ -106,6 +115,7 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "8"
+        displaypeek.text = displaypeek.text! + "8"
     }
     @IBAction func H9(_ sender: Any) {
         if(display.text == "0")
@@ -113,9 +123,11 @@ class ViewController: UIViewController {
             display.text = ""
         }
         display.text = display.text! + "9"
+        displaypeek.text = displaypeek.text! + "9"
     }
     @IBAction func H0(_ sender: Any) {
         display.text = display.text! + "0"
+        displaypeek.text = displaypeek.text! + "0"
     }
     
     var myStack = Stack<Double>()
@@ -155,11 +167,13 @@ class ViewController: UIViewController {
                     {
                         get = 1/get
                     }
+                    print(get)
                     myStack.push(element: get)
                     get = 1 //进栈后重置总值
                 }
                 OmyStack.push(element: count)
             }
+            displaypeek.text = displaypeek.text! + "+"
             remember = true //记录小数点是否输入
             display.text = ""  //清空屏幕
             countFrist += 1 //记录输入次数 便于查看是否为第一次输入
@@ -173,7 +187,14 @@ class ViewController: UIViewController {
         {
             count = 2
             temp = Double(display.text!)!
-            myStack.push(element:temp)
+            if(OmyStack.peek() == 2 ){//判断乘除加法前是否有减号 有则置为负数 进栈
+                temp *= -1
+                myStack.push(element: temp)
+                countNegative += 1
+            }else{
+                myStack.push(element: temp)
+            }
+            
             if(countFrist == 0){
                 OmyStack.push(element: count)
                 
@@ -193,11 +214,13 @@ class ViewController: UIViewController {
                     {
                         get = 1/get
                     }
+                    print(get)
                     myStack.push(element: get)
                     get = 1
                 }
                 OmyStack.push(element: count)
             }
+            displaypeek.text = displaypeek.text! + "-"
             remember = true
             display.text = ""
             countFrist += 1
@@ -211,19 +234,24 @@ class ViewController: UIViewController {
         {
             count = 3
             temp = Double(display.text!)!
-            if(OmyStack.peek() == 2 ){  //判断乘除加法前是否有减号 有则置为负数 进栈
+            if(OmyStack.peek() == 2 ){//判断乘除加法前是否有减号 有则置为负数 进栈
                 temp *= -1
                 myStack.push(element: temp)
                 countNegative += 1
             }else{
                 myStack.push(element: temp)
             }
+            
             if(countFrist == 0){
                 get = myStack.pop()!
                 myStack.push(element: get)
                 get = 1
             }else{
                 let x = OmyStack.peek()!
+                if(x == 3 || x == 4) //如果是乘除的话将乘除符号出栈
+                {
+                    let _ = OmyStack.pop()!
+                }
                 switch(x){
                 case 3: get = myStack.pop()! / myStack.pop()!
                 case 4: get = myStack.pop()! * myStack.pop()!
@@ -234,9 +262,11 @@ class ViewController: UIViewController {
                     {
                         get = 1/get
                     }
+                    print(get)
                     myStack.push(element: get)
                 }
             }
+            displaypeek.text = displaypeek.text! + "/"
             OmyStack.push(element: count)
             remember = true
             display.text = ""
@@ -255,6 +285,7 @@ class ViewController: UIViewController {
                 temp *= -1
                 myStack.push(element: temp)
                 countNegative += 1
+                print(temp)
             }else{
                 myStack.push(element: temp)
             }
@@ -279,11 +310,12 @@ class ViewController: UIViewController {
                     {
                         get = 1/get
                     }
+                    print(get)
                     myStack.push(element: get)
                     get = 1
-                    
                 }
             }
+            displaypeek.text = displaypeek.text! + "*"
             OmyStack.push(element: count)
             remember = true
             display.text = ""
@@ -327,6 +359,7 @@ class ViewController: UIViewController {
             countFrist = 0 //清零首数字计数
             print(get)//显示
             countget += 1 //记录等号使用次数
+            displaypeek.text = displaypeek.text! + "="
         }
 }
     //正负号转换
@@ -407,6 +440,7 @@ class ViewController: UIViewController {
         countFrist = 0 //清零判断首数字
         countNegative = 0 //清零式子中负数
         count3 = 0 //清零记录乘除前加减号
+        displaypeek.text = ""
     }
     override func viewDidLoad() {
         super.viewDidLoad()
