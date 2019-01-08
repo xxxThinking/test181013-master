@@ -360,7 +360,7 @@ class ViewController: UIViewController {
             countFrist = 0 //清零首数字计数
             print(get)//显示
             countget += 1 //记录等号使用次数
-            displaypeek.text = displaypeek.text! + "="
+            displaypeek.text = displaypeek.text! + " "
         }
 }
     //正负号转换
@@ -388,6 +388,7 @@ class ViewController: UIViewController {
         {
             if(remember){
                 display.text = display.text! + "."
+                displaypeek.text = displaypeek.text! + "."
             }
             remember = false
         }
