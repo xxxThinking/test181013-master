@@ -338,6 +338,7 @@ class ViewController: UIViewController {
             for _ in 1...OmyStack.count{
                 Calculation()
             }
+                remember = false
             }else //否则做等号后计算
             {
                 temp = Double(display.text!)!
@@ -351,6 +352,7 @@ class ViewController: UIViewController {
                 for _ in 1...OmyStack.count{
                     Calculation()
             }
+                remember = false
             }
             get = myStack.pop()! //得到get出栈
             display.text = "\(get)" //显示
@@ -384,12 +386,8 @@ class ViewController: UIViewController {
             remember = false
         }else
         {
-            if(countget > 0){  //如果"="号调用次数 > 0 则不能输入小数点
-                remember = false
-            }else{
             if(remember){
                 display.text = display.text! + "."
-            }
             }
             remember = false
         }
