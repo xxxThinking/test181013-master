@@ -321,7 +321,7 @@ class ViewController: UIViewController {
             countFrist += 1
     }
     }
-    @IBAction func HZ(_ sender: Any) {
+    @IBAction func equa(_ sender: Any) {
         if(display.text == "0" || display.text == "")
         {
         } else
