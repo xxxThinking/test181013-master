@@ -50,7 +50,6 @@ class ViewController: UIViewController {
     var countFrist = 0  //记录第一个数字
     var countNegative = 0  //记录乘除加法前是否有减号
     var countget = 0 //记录 = 号调用次数
-    var temp1:Int = 0
     @IBOutlet weak var display: UITextField!
     @IBOutlet weak var displaypeek: UITextField!
     @IBAction func H1(_ sender: Any) {
